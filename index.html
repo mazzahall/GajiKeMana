@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GajiKeMana Pro - Clean State</title>
+  <title>GajiKeMana Pro - Multi-Device Cloud Sync</title>
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -54,339 +54,349 @@
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-emerald-500 selection:text-white">
 
-  <!-- TOP HEADER / NAVIGATION -->
-  <header class="sticky top-0 z-40 bg-[#090d16]/80 backdrop-blur-xl border-b border-slate-800/80">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      
-      <!-- Brand & Status -->
-      <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 via-teal-500 to-cyan-500 flex items-center justify-center text-slate-950 shadow-lg shadow-emerald-500/20 font-black text-xl">
-          G
-        </div>
-        <div>
-          <div class="flex items-center gap-2">
-            <h1 class="text-lg font-extrabold tracking-tight text-white">GajiKeMana <span class="text-xs px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold">PRO</span></h1>
-          </div>
-          <p class="text-[10px] text-slate-400 font-medium">WEALTH & CASHFLOW INTELLIGENCE</p>
-        </div>
+  <!-- LOGIN CONTAINER (Tampil jika belum login Google) -->
+  <div id="login-screen" class="fixed inset-0 z-50 bg-[#090d16] flex items-center justify-center p-4">
+    <div class="max-w-md w-full bg-[#111726] border border-slate-800 rounded-3xl p-8 text-center shadow-2xl space-y-6">
+      <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-500 mx-auto flex items-center justify-center text-slate-950 font-black text-3xl shadow-lg shadow-emerald-500/20">
+        G
       </div>
+      <div>
+        <h2 class="text-2xl font-extrabold text-white">GajiKeMana PRO</h2>
+        <p class="text-xs text-slate-400 mt-1">Multi-Device Cloud Expense Tracker</p>
+      </div>
+      <p class="text-xs text-slate-300 leading-relaxed bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+        Login dengan akun Google Anda untuk mengunggah dan menyinkronkan data keuangan di semua HP, Tablet, dan Laptop secara real-time.
+      </p>
+      <button onclick="loginWithGoogle()" class="w-full bg-white hover:bg-slate-100 text-slate-900 font-bold py-3.5 px-4 rounded-xl shadow-lg flex items-center justify-center gap-3 transition active:scale-95">
+        <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.24v3.15C3.26 21.39 7.33 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.24C.45 8.15 0 9.99 0 12s.45 3.85 1.24 5.42l4.04-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.61 1.24 6.58l4.04 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>
+        <span>Masuk dengan Google</span>
+      </button>
+    </div>
+  </div>
 
-      <!-- Action Tools -->
-      <div class="flex items-center space-x-3">
-        <input type="month" id="global-month-picker" class="bg-[#111726] text-xs font-semibold text-slate-200 border border-slate-800 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer">
+  <!-- MAIN DASHBOARD CONTENT (Tampil jika sudah login Google) -->
+  <div id="app-screen" class="hidden min-h-screen flex flex-col">
 
-        <button onclick="openModal('tx')" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold px-4 py-2 rounded-xl shadow-lg shadow-emerald-500/20 flex items-center gap-1.5 transition active:scale-95">
-          <i data-lucide="plus-circle" class="w-4 h-4"></i>
-          <span>Catat Transaksi</span>
-        </button>
+    <!-- TOP HEADER / NAVIGATION -->
+    <header class="sticky top-0 z-40 bg-[#090d16]/80 backdrop-blur-xl border-b border-slate-800/80">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        
+        <!-- Brand & Status -->
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 via-teal-500 to-cyan-500 flex items-center justify-center text-slate-950 shadow-lg shadow-emerald-500/20 font-black text-xl">
+            G
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-lg font-extrabold tracking-tight text-white">GajiKeMana <span class="text-xs px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold">CLOUD</span></h1>
+            </div>
+            <p class="text-[10px] text-slate-400 font-medium" id="user-email">Syncing...</p>
+          </div>
+        </div>
 
-        <button onclick="openModal('transfer')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-3 py-2 rounded-xl border border-slate-700 flex items-center gap-1.5 transition">
-          <i data-lucide="arrow-left-right" class="w-4 h-4 text-emerald-400"></i>
-          <span class="hidden sm:inline">Transfer</span>
-        </button>
+        <!-- Action Tools -->
+        <div class="flex items-center space-x-3">
+          <input type="month" id="global-month-picker" class="bg-[#111726] text-xs font-semibold text-slate-200 border border-slate-800 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer">
 
-        <div class="relative group">
-          <button class="p-2 rounded-xl bg-[#111726] border border-slate-800 text-slate-400 hover:text-white transition">
-            <i data-lucide="more-vertical" class="w-4 h-4"></i>
+          <button onclick="openModal('tx')" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold px-4 py-2 rounded-xl shadow-lg shadow-emerald-500/20 flex items-center gap-1.5 transition active:scale-95">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>Catat Transaksi</span>
           </button>
-          <div class="absolute right-0 mt-2 w-48 bg-[#111726] border border-slate-800 rounded-xl shadow-2xl py-1 hidden group-hover:block z-50">
-            <button onclick="exportJSON()" class="w-full text-left px-4 py-2 text-xs hover:bg-slate-800 text-slate-300 flex items-center gap-2">
-              <i data-lucide="download" class="w-3.5 h-3.5 text-emerald-400"></i> Export JSON Backup
-            </button>
-            <label class="w-full text-left px-4 py-2 text-xs hover:bg-slate-800 text-slate-300 flex items-center gap-2 cursor-pointer">
-              <i data-lucide="upload" class="w-3.5 h-3.5 text-cyan-400"></i> Import JSON Data
-              <input type="file" id="import-file" accept=".json" onchange="importJSON(event)" class="hidden">
-            </label>
-            <div class="border-t border-slate-800 my-1"></div>
-            <button onclick="resetAllData()" class="w-full text-left px-4 py-2 text-xs hover:bg-rose-950/40 text-rose-400 flex items-center gap-2">
-              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Reset Semua Data
-            </button>
-          </div>
-        </div>
-      </div>
 
-    </div>
-  </header>
+          <button onclick="openModal('transfer')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-3 py-2 rounded-xl border border-slate-700 flex items-center gap-1.5 transition">
+            <i data-lucide="arrow-left-right" class="w-4 h-4 text-emerald-400"></i>
+            <span class="hidden sm:inline">Transfer</span>
+          </button>
 
-  <!-- MAIN DASHBOARD CONTENT -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-
-    <!-- KPI STATS CARDS GRID -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      
-      <!-- Net Worth -->
-      <div class="bg-[#111726] rounded-2xl p-5 border border-slate-800/80 shadow-xl relative overflow-hidden">
-        <div class="flex items-center justify-between text-slate-400">
-          <span class="text-xs font-bold uppercase tracking-wider">Kekayaan Bersih (Net Worth)</span>
-          <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
-            <i data-lucide="shield-check" class="w-4 h-4"></i>
-          </div>
-        </div>
-        <div class="mt-3">
-          <h3 class="text-2xl font-extrabold text-white font-mono-num" id="kpi-net-worth">Rp 0</h3>
-          <p class="text-xs text-slate-400 mt-1 flex items-center gap-1.5" id="kpi-assets-liab">
-            Aset: Rp 0 | Liabilitas: Rp 0
-          </p>
-        </div>
-      </div>
-
-      <!-- Cashflow Month Income vs Expense -->
-      <div class="bg-[#111726] rounded-2xl p-5 border border-slate-800/80 shadow-xl">
-        <div class="flex items-center justify-between text-slate-400">
-          <span class="text-xs font-bold uppercase tracking-wider">Arus Kas Bulan Ini</span>
-          <div class="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
-            <i data-lucide="activity" class="w-4 h-4"></i>
-          </div>
-        </div>
-        <div class="mt-3">
-          <h3 class="text-2xl font-extrabold text-white font-mono-num" id="kpi-net-cashflow">Rp 0</h3>
-          <div class="flex justify-between items-center text-xs mt-1">
-            <span class="text-emerald-400 font-semibold" id="kpi-inc-month">In: Rp 0</span>
-            <span class="text-rose-400 font-semibold" id="kpi-exp-month">Out: Rp 0</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Savings & Burn Rate -->
-      <div class="bg-[#111726] rounded-2xl p-5 border border-slate-800/80 shadow-xl">
-        <div class="flex items-center justify-between text-slate-400">
-          <span class="text-xs font-bold uppercase tracking-wider">Tingkat Tabungan (Savings Rate)</span>
-          <div class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center">
-            <i data-lucide="percent" class="w-4 h-4"></i>
-          </div>
-        </div>
-        <div class="mt-3">
-          <h3 class="text-2xl font-extrabold text-white font-mono-num" id="kpi-savings-rate">0%</h3>
-          <p class="text-xs text-slate-400 mt-1" id="kpi-burn-rate">Rata-rata pengeluaran harian: Rp 0</p>
-        </div>
-      </div>
-
-      <!-- Financial Runway -->
-      <div class="bg-[#111726] rounded-2xl p-5 border border-slate-800/80 shadow-xl">
-        <div class="flex items-center justify-between text-slate-400">
-          <span class="text-xs font-bold uppercase tracking-wider">Financial Runway (Dana Darurat)</span>
-          <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center">
-            <i data-lucide="hourglass" class="w-4 h-4"></i>
-          </div>
-        </div>
-        <div class="mt-3">
-          <h3 class="text-2xl font-extrabold text-white font-mono-num" id="kpi-runway">0 Bulan</h3>
-          <p class="text-xs text-slate-400 mt-1">Estimasi daya bertahan tanpa pemasukan</p>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- 50/30/20 BUDGET RULE ALLOCATION & MONTHLY PROGRESS -->
-    <div class="bg-[#111726] rounded-2xl p-5 border border-slate-800/80 shadow-xl space-y-4">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/60 pb-3">
-        <div>
-          <h2 class="text-sm font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
-            <i data-lucide="pie-chart" class="w-4 h-4 text-emerald-400"></i> Alokasi Anggaran 50 / 30 / 20 Rule
-          </h2>
-          <p class="text-xs text-slate-400">50% Needs (Kebutuhan), 30% Wants (Keinginan), 20% Savings/Investments (Tabungan)</p>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- Needs (50%) -->
-        <div class="p-4 rounded-xl bg-[#090d16] border border-slate-800/80">
-          <div class="flex justify-between items-center text-xs mb-1">
-            <span class="font-bold text-blue-400 uppercase">Needs (Kebutuhan)</span>
-            <span class="text-slate-400 font-mono-num" id="b-needs-val">Rp 0 / Rp 0</span>
-          </div>
-          <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden mt-2">
-            <div id="b-needs-bar" class="bg-blue-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
-          </div>
-          <div class="flex justify-between text-[11px] text-slate-400 mt-1">
-            <span id="b-needs-pct">0% terpakai</span>
-            <span>Target max: 50%</span>
-          </div>
-        </div>
-
-        <!-- Wants (30%) -->
-        <div class="p-4 rounded-xl bg-[#090d16] border border-slate-800/80">
-          <div class="flex justify-between items-center text-xs mb-1">
-            <span class="font-bold text-purple-400 uppercase">Wants (Keinginan & Lifestyle)</span>
-            <span class="text-slate-400 font-mono-num" id="b-wants-val">Rp 0 / Rp 0</span>
-          </div>
-          <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden mt-2">
-            <div id="b-wants-bar" class="bg-purple-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
-          </div>
-          <div class="flex justify-between text-[11px] text-slate-400 mt-1">
-            <span id="b-wants-pct">0% terpakai</span>
-            <span>Target max: 30%</span>
-          </div>
-        </div>
-
-        <!-- Savings (20%) -->
-        <div class="p-4 rounded-xl bg-[#090d16] border border-slate-800/80">
-          <div class="flex justify-between items-center text-xs mb-1">
-            <span class="font-bold text-emerald-400 uppercase">Savings & Investment (Tabungan)</span>
-            <span class="text-slate-400 font-mono-num" id="b-savings-val">Rp 0 / Rp 0</span>
-          </div>
-          <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden mt-2">
-            <div id="b-savings-bar" class="bg-emerald-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
-          </div>
-          <div class="flex justify-between text-[11px] text-slate-400 mt-1">
-            <span id="b-savings-pct">0% terealisasi</span>
-            <span>Target min: 20%</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- MIDDLE SECTION: ACCOUNTS & RECURRING BILLS -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      
-      <!-- ACCOUNTS & ASSET ALLOCATION (2 cols) -->
-      <div class="lg:col-span-2 bg-[#111726] rounded-2xl p-5 border border-slate-800/80 shadow-xl space-y-4">
-        <div class="flex items-center justify-between border-b border-slate-800/60 pb-3">
-          <h2 class="text-sm font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
-            <i data-lucide="wallet" class="w-4 h-4 text-emerald-400"></i> Portfolio Dompet & Akun Investasi
-          </h2>
-          <button onclick="openModal('account')" class="text-xs font-bold text-emerald-400 hover:text-emerald-300 flex items-center gap-1">
-            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Tambah Akun
+          <button onclick="logoutGoogle()" class="p-2 rounded-xl bg-[#111726] border border-slate-800 text-slate-400 hover:text-rose-400 transition" title="Logout">
+            <i data-lucide="log-out" class="w-4 h-4"></i>
           </button>
         </div>
 
-        <!-- Accounts Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3" id="accounts-grid">
-          <!-- Populated by JS -->
+      </div>
+    </header>
+
+    <!-- MAIN DASHBOARD CONTENT -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+      <!-- KPI STATS CARDS GRID -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <!-- Net Worth -->
+        <div class="bg-[#111726] rounded-2xl p-5 border border-slate-800/80 shadow-xl relative overflow-hidden">
+          <div class="flex items-center justify-between text-slate-400">
+            <span class="text-xs font-bold uppercase tracking-wider">Kekayaan Bersih (Net Worth)</span>
+            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+              <i data-lucide="shield-check" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <div class="mt-3">
+            <h3 class="text-2xl font-extrabold text-white font-mono-num" id="kpi-net-worth">Rp 0</h3>
+            <p class="text-xs text-slate-400 mt-1 flex items-center gap-1.5" id="kpi-assets-liab">
+              Aset: Rp 0 | Liabilitas: Rp 0
+            </p>
+          </div>
         </div>
 
-        <!-- Empty Accounts Hint -->
-        <div id="accounts-empty" class="py-6 text-center text-slate-500 text-xs hidden">
-          Belum ada akun dompet / bank. Klik tombol <strong>+ Tambah Akun</strong> di atas untuk membuat akun pertama Anda.
+        <!-- Cashflow Month Income vs Expense -->
+        <div class="bg-[#111726] rounded-2xl p-5 border border-slate-800/80 shadow-xl">
+          <div class="flex items-center justify-between text-slate-400">
+            <span class="text-xs font-bold uppercase tracking-wider">Arus Kas Bulan Ini</span>
+            <div class="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
+              <i data-lucide="activity" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <div class="mt-3">
+            <h3 class="text-2xl font-extrabold text-white font-mono-num" id="kpi-net-cashflow">Rp 0</h3>
+            <div class="flex justify-between items-center text-xs mt-1">
+              <span class="text-emerald-400 font-semibold" id="kpi-inc-month">In: Rp 0</span>
+              <span class="text-rose-400 font-semibold" id="kpi-exp-month">Out: Rp 0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Savings & Burn Rate -->
+        <div class="bg-[#111726] rounded-2xl p-5 border border-slate-800/80 shadow-xl">
+          <div class="flex items-center justify-between text-slate-400">
+            <span class="text-xs font-bold uppercase tracking-wider">Tingkat Tabungan (Savings Rate)</span>
+            <div class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center">
+              <i data-lucide="percent" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <div class="mt-3">
+            <h3 class="text-2xl font-extrabold text-white font-mono-num" id="kpi-savings-rate">0%</h3>
+            <p class="text-xs text-slate-400 mt-1" id="kpi-burn-rate">Rata-rata pengeluaran harian: Rp 0</p>
+          </div>
+        </div>
+
+        <!-- Financial Runway -->
+        <div class="bg-[#111726] rounded-2xl p-5 border border-slate-800/80 shadow-xl">
+          <div class="flex items-center justify-between text-slate-400">
+            <span class="text-xs font-bold uppercase tracking-wider">Financial Runway (Dana Darurat)</span>
+            <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center">
+              <i data-lucide="hourglass" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <div class="mt-3">
+            <h3 class="text-2xl font-extrabold text-white font-mono-num" id="kpi-runway">0 Bulan</h3>
+            <p class="text-xs text-slate-400 mt-1">Estimasi daya bertahan tanpa pemasukan</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 50/30/20 BUDGET RULE ALLOCATION & MONTHLY PROGRESS -->
+      <div class="bg-[#111726] rounded-2xl p-5 border border-slate-800/80 shadow-xl space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/60 pb-3">
+          <div>
+            <h2 class="text-sm font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
+              <i data-lucide="pie-chart" class="w-4 h-4 text-emerald-400"></i> Alokasi Anggaran 50 / 30 / 20 Rule
+            </h2>
+            <p class="text-xs text-slate-400">50% Needs (Kebutuhan), 30% Wants (Keinginan), 20% Savings/Investments (Tabungan)</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Needs (50%) -->
+          <div class="p-4 rounded-xl bg-[#090d16] border border-slate-800/80">
+            <div class="flex justify-between items-center text-xs mb-1">
+              <span class="font-bold text-blue-400 uppercase">Needs (Kebutuhan)</span>
+              <span class="text-slate-400 font-mono-num" id="b-needs-val">Rp 0 / Rp 0</span>
+            </div>
+            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden mt-2">
+              <div id="b-needs-bar" class="bg-blue-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+            <div class="flex justify-between text-[11px] text-slate-400 mt-1">
+              <span id="b-needs-pct">0% terpakai</span>
+              <span>Target max: 50%</span>
+            </div>
+          </div>
+
+          <!-- Wants (30%) -->
+          <div class="p-4 rounded-xl bg-[#090d16] border border-slate-800/80">
+            <div class="flex justify-between items-center text-xs mb-1">
+              <span class="font-bold text-purple-400 uppercase">Wants (Keinginan & Lifestyle)</span>
+              <span class="text-slate-400 font-mono-num" id="b-wants-val">Rp 0 / Rp 0</span>
+            </div>
+            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden mt-2">
+              <div id="b-wants-bar" class="bg-purple-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+            <div class="flex justify-between text-[11px] text-slate-400 mt-1">
+              <span id="b-wants-pct">0% terpakai</span>
+              <span>Target max: 30%</span>
+            </div>
+          </div>
+
+          <!-- Savings (20%) -->
+          <div class="p-4 rounded-xl bg-[#090d16] border border-slate-800/80">
+            <div class="flex justify-between items-center text-xs mb-1">
+              <span class="font-bold text-emerald-400 uppercase">Savings & Investment (Tabungan)</span>
+              <span class="text-slate-400 font-mono-num" id="b-savings-val">Rp 0 / Rp 0</span>
+            </div>
+            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden mt-2">
+              <div id="b-savings-bar" class="bg-emerald-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+            <div class="flex justify-between text-[11px] text-slate-400 mt-1">
+              <span id="b-savings-pct">0% terealisasi</span>
+              <span>Target min: 20%</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- RECURRING SUBSCRIPTIONS / BILLS TRACKER (1 col) -->
-      <div class="bg-[#111726] rounded-2xl p-5 border border-slate-800/80 shadow-xl flex flex-col justify-between space-y-4">
-        <div>
+      <!-- MIDDLE SECTION: ACCOUNTS & RECURRING BILLS -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- ACCOUNTS & ASSET ALLOCATION (2 cols) -->
+        <div class="lg:col-span-2 bg-[#111726] rounded-2xl p-5 border border-slate-800/80 shadow-xl space-y-4">
           <div class="flex items-center justify-between border-b border-slate-800/60 pb-3">
             <h2 class="text-sm font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
-              <i data-lucide="calendar" class="w-4 h-4 text-amber-400"></i> Tagihan & Subskripsi
+              <i data-lucide="wallet" class="w-4 h-4 text-emerald-400"></i> Portfolio Dompet & Akun Investasi
             </h2>
-            <button onclick="openModal('recurring')" class="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1">
-              <i data-lucide="plus" class="w-3.5 h-3.5"></i> Tambah
+            <button onclick="openModal('account')" class="text-xs font-bold text-emerald-400 hover:text-emerald-300 flex items-center gap-1">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i> Tambah Akun
             </button>
           </div>
 
-          <div class="mt-3 space-y-2.5 max-h-[220px] overflow-y-auto pr-1" id="recurring-list">
+          <!-- Accounts Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3" id="accounts-grid">
             <!-- Populated by JS -->
           </div>
 
-          <!-- Empty Recurring Hint -->
-          <div id="recurring-empty" class="py-8 text-center text-slate-500 text-xs hidden">
-            Belum ada tagihan rutin bulanan.
+          <!-- Empty Accounts Hint -->
+          <div id="accounts-empty" class="py-6 text-center text-slate-500 text-xs hidden">
+            Belum ada akun dompet / bank. Klik tombol <strong>+ Tambah Akun</strong> di atas untuk membuat akun pertama Anda.
           </div>
         </div>
 
-        <div class="p-3 bg-[#090d16] rounded-xl border border-slate-800 text-xs flex justify-between items-center text-slate-400">
-          <span>Total Tagihan Bulanan:</span>
-          <span class="font-bold text-white font-mono-num" id="total-recurring-val">Rp 0</span>
+        <!-- RECURRING SUBSCRIPTIONS / BILLS TRACKER (1 col) -->
+        <div class="bg-[#111726] rounded-2xl p-5 border border-slate-800/80 shadow-xl flex flex-col justify-between space-y-4">
+          <div>
+            <div class="flex items-center justify-between border-b border-slate-800/60 pb-3">
+              <h2 class="text-sm font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
+                <i data-lucide="calendar" class="w-4 h-4 text-amber-400"></i> Tagihan & Subskripsi
+              </h2>
+              <button onclick="openModal('recurring')" class="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1">
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i> Tambah
+              </button>
+            </div>
+
+            <div class="mt-3 space-y-2.5 max-h-[220px] overflow-y-auto pr-1" id="recurring-list">
+              <!-- Populated by JS -->
+            </div>
+
+            <!-- Empty Recurring Hint -->
+            <div id="recurring-empty" class="py-8 text-center text-slate-500 text-xs hidden">
+              Belum ada tagihan rutin bulanan.
+            </div>
+          </div>
+
+          <div class="p-3 bg-[#090d16] rounded-xl border border-slate-800 text-xs flex justify-between items-center text-slate-400">
+            <span>Total Tagihan Bulanan:</span>
+            <span class="font-bold text-white font-mono-num" id="total-recurring-val">Rp 0</span>
+          </div>
         </div>
+
       </div>
 
-    </div>
-
-    <!-- CHARTS SECTION -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      
-      <!-- Multi-Month Cashflow Trend -->
-      <div class="lg:col-span-2 bg-[#111726] rounded-2xl p-5 border border-slate-800/80 shadow-xl flex flex-col">
-        <h2 class="text-sm font-bold text-slate-200 uppercase tracking-wider mb-4 flex items-center gap-2">
-          <i data-lucide="bar-chart-2" class="w-4 h-4 text-emerald-400"></i> Histori Arus Kas 6 Bulan
-        </h2>
-        <div class="relative flex-1 min-h-[240px]">
-          <canvas id="chartCashflow"></canvas>
-        </div>
-      </div>
-
-      <!-- Category Expense Donuts -->
-      <div class="bg-[#111726] rounded-2xl p-5 border border-slate-800/80 shadow-xl flex flex-col">
-        <h2 class="text-sm font-bold text-slate-200 uppercase tracking-wider mb-4 flex items-center gap-2">
-          <i data-lucide="pie-chart" class="w-4 h-4 text-cyan-400"></i> Distribusi Pengeluaran
-        </h2>
-        <div class="relative flex-1 min-h-[240px] flex items-center justify-center">
-          <canvas id="chartCategory"></canvas>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ADVANCED TRANSACTIONS DATA TABLE -->
-    <div class="bg-[#111726] rounded-2xl border border-slate-800/80 shadow-xl overflow-hidden">
-      
-      <!-- Header Controls -->
-      <div class="p-5 border-b border-slate-800/80 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-        <div>
-          <h2 class="text-base font-bold text-white flex items-center gap-2">
-            <i data-lucide="database" class="w-5 h-5 text-emerald-400"></i> Buku Besar Transaksi (Ledger)
+      <!-- CHARTS SECTION -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Multi-Month Cashflow Trend -->
+        <div class="lg:col-span-2 bg-[#111726] rounded-2xl p-5 border border-slate-800/80 shadow-xl flex flex-col">
+          <h2 class="text-sm font-bold text-slate-200 uppercase tracking-wider mb-4 flex items-center gap-2">
+            <i data-lucide="bar-chart-2" class="w-4 h-4 text-emerald-400"></i> Histori Arus Kas 6 Bulan
           </h2>
-          <p class="text-xs text-slate-400">Pencatatan mendalam transaksi dengan filter multi-parameter</p>
+          <div class="relative flex-1 min-h-[240px]">
+            <canvas id="chartCashflow"></canvas>
+          </div>
         </div>
 
-        <div class="flex flex-wrap items-center gap-2">
-          <!-- Search -->
-          <div class="relative flex-1 sm:flex-none">
-            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
-            <input type="text" id="filter-search" placeholder="Cari deskripsi..." class="w-full sm:w-44 pl-9 pr-3 py-1.5 bg-[#090d16] text-xs font-medium rounded-xl border border-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+        <!-- Category Expense Donuts -->
+        <div class="bg-[#111726] rounded-2xl p-5 border border-slate-800/80 shadow-xl flex flex-col">
+          <h2 class="text-sm font-bold text-slate-200 uppercase tracking-wider mb-4 flex items-center gap-2">
+            <i data-lucide="pie-chart" class="w-4 h-4 text-cyan-400"></i> Distribusi Pengeluaran
+          </h2>
+          <div class="relative flex-1 min-h-[240px] flex items-center justify-center">
+            <canvas id="chartCategory"></canvas>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ADVANCED TRANSACTIONS DATA TABLE -->
+      <div class="bg-[#111726] rounded-2xl border border-slate-800/80 shadow-xl overflow-hidden">
+        
+        <!-- Header Controls -->
+        <div class="p-5 border-b border-slate-800/80 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-base font-bold text-white flex items-center gap-2">
+              <i data-lucide="database" class="w-5 h-5 text-emerald-400"></i> Buku Besar Transaksi (Ledger Cloud)
+            </h2>
+            <p class="text-xs text-slate-400">Pencatatan mendalam transaksi dengan filter multi-parameter</p>
           </div>
 
-          <!-- Type Filter -->
-          <select id="filter-type" class="bg-[#090d16] text-xs rounded-xl px-3 py-1.5 border border-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500">
-            <option value="all">Semua Tipe</option>
-            <option value="income">Pemasukan</option>
-            <option value="expense">Pengeluaran</option>
-            <option value="transfer">Transfer</option>
-          </select>
+          <div class="flex flex-wrap items-center gap-2">
+            <!-- Search -->
+            <div class="relative flex-1 sm:flex-none">
+              <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+              <input type="text" id="filter-search" placeholder="Cari deskripsi..." class="w-full sm:w-44 pl-9 pr-3 py-1.5 bg-[#090d16] text-xs font-medium rounded-xl border border-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            </div>
 
-          <!-- 50/30/20 Bucket Filter -->
-          <select id="filter-bucket" class="bg-[#090d16] text-xs rounded-xl px-3 py-1.5 border border-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500">
-            <option value="all">Semua Bucket</option>
-            <option value="needs">Needs (50%)</option>
-            <option value="wants">Wants (30%)</option>
-            <option value="savings">Savings (20%)</option>
-          </select>
+            <!-- Type Filter -->
+            <select id="filter-type" class="bg-[#090d16] text-xs rounded-xl px-3 py-1.5 border border-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="all">Semua Tipe</option>
+              <option value="income">Pemasukan</option>
+              <option value="expense">Pengeluaran</option>
+              <option value="transfer">Transfer</option>
+            </select>
 
-          <!-- Account Filter -->
-          <select id="filter-account" class="bg-[#090d16] text-xs rounded-xl px-3 py-1.5 border border-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500">
-            <option value="all">Semua Akun</option>
-          </select>
+            <!-- 50/30/20 Bucket Filter -->
+            <select id="filter-bucket" class="bg-[#090d16] text-xs rounded-xl px-3 py-1.5 border border-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="all">Semua Bucket</option>
+              <option value="needs">Needs (50%)</option>
+              <option value="wants">Wants (30%)</option>
+              <option value="savings">Savings (20%)</option>
+            </select>
+
+            <!-- Account Filter -->
+            <select id="filter-account" class="bg-[#090d16] text-xs rounded-xl px-3 py-1.5 border border-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="all">Semua Akun</option>
+            </select>
+          </div>
         </div>
+
+        <!-- Table Body -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-[#090d16] text-slate-400 uppercase font-semibold text-[11px] border-b border-slate-800">
+              <tr>
+                <th class="py-3.5 px-4">Tanggal</th>
+                <th class="py-3.5 px-4">Deskripsi & Kategori</th>
+                <th class="py-3.5 px-4">Bucket</th>
+                <th class="py-3.5 px-4">Akun Sumber</th>
+                <th class="py-3.5 px-4 text-right">Jumlah (Rp)</th>
+                <th class="py-3.5 px-4 text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="tx-table-body" class="divide-y divide-slate-800/60 text-slate-300">
+              <!-- JS dynamic insertion -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Empty State -->
+        <div id="tx-empty-state" class="py-12 text-center text-slate-500 hidden">
+          <i data-lucide="inbox" class="w-10 h-10 mx-auto stroke-1 mb-2 text-slate-600"></i>
+          <p class="font-semibold text-xs">Belum ada data transaksi.</p>
+          <p class="text-[11px] text-slate-600 mt-0.5">Klik "+ Catat Transaksi" di kanan atas untuk memulai.</p>
+        </div>
+
       </div>
 
-      <!-- Table Body -->
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs">
-          <thead class="bg-[#090d16] text-slate-400 uppercase font-semibold text-[11px] border-b border-slate-800">
-            <tr>
-              <th class="py-3.5 px-4">Tanggal</th>
-              <th class="py-3.5 px-4">Deskripsi & Kategori</th>
-              <th class="py-3.5 px-4">Bucket</th>
-              <th class="py-3.5 px-4">Akun Sumber</th>
-              <th class="py-3.5 px-4 text-right">Jumlah (Rp)</th>
-              <th class="py-3.5 px-4 text-center">Aksi</th>
-            </tr>
-          </thead>
-          <tbody id="tx-table-body" class="divide-y divide-slate-800/60 text-slate-300">
-            <!-- JS dynamic insertion -->
-          </tbody>
-        </table>
-      </div>
+    </main>
 
-      <!-- Empty State -->
-      <div id="tx-empty-state" class="py-12 text-center text-slate-500 hidden">
-        <i data-lucide="inbox" class="w-10 h-10 mx-auto stroke-1 mb-2 text-slate-600"></i>
-        <p class="font-semibold text-xs">Belum ada data transaksi.</p>
-        <p class="text-[11px] text-slate-600 mt-0.5">Klik "+ Catat Transaksi" di kanan atas untuk memulai.</p>
-      </div>
-
-    </div>
-
-  </main>
+  </div>
 
   <!-- MODAL: ADD / EDIT TRANSACTION -->
   <div id="modal-tx" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-200">
@@ -460,7 +470,7 @@
         </div>
 
         <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-2.5 rounded-xl shadow-lg shadow-emerald-500/20 transition">
-          Simpan Transaksi
+          Simpan ke Cloud
         </button>
       </form>
     </div>
@@ -575,8 +585,38 @@
     </div>
   </div>
 
-  <!-- JAVASCRIPT LOGIC ENGINE -->
-  <script>
+  <!-- FIREBASE SDKs & REALTIME APPLICATION LOGIC -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // 🔑 FIREBASE CONFIG MILIK ANDA
+    const firebaseConfig = {
+      apiKey: "AIzaSyAKF-WXD85fkri5zdVAp5nwM10t4z7RjM8",
+      authDomain: "gajikemana.firebaseapp.com",
+      projectId: "gajikemana",
+      storageBucket: "gajikemana.firebasestorage.app",
+      messagingSenderId: "1038187445718",
+      appId: "1:1038187445718:web:e3a12c828e2d0638d17877",
+      measurementId: "G-JHX22N2HXG"
+    };
+
+    // Initialize Firebase Services
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const provider = new GoogleAuthProvider();
+
+    // Application States
+    let currentUser = null;
+    let accounts = [];
+    let transactions = [];
+    let recurringBills = [];
+
+    let chartCashflowObj = null;
+    let chartCategoryObj = null;
+
     // --- CATEGORIES DEFINITION ---
     const CATEGORIES = [
       { id: 'makanan', name: 'Makanan & Kuliner', type: 'expense', bucket: 'needs', icon: 'utensils', color: '#f43f5e' },
@@ -589,31 +629,56 @@
       { id: 'gaji', name: 'Gaji Bulanan', type: 'income', bucket: 'savings', icon: 'briefcase', color: '#10b981' },
       { id: 'freelance', name: 'Freelance & Side Job', type: 'income', bucket: 'savings', icon: 'laptop', color: '#3b82f6' },
       { id: 'dividend', name: 'Dividen & Profit', type: 'income', bucket: 'savings', icon: 'coins', color: '#8b5cf6' },
+      { id: 'transfer', name: 'Transfer Antar Akun', type: 'transfer', bucket: 'savings', icon: 'arrow-left-right', color: '#06b6d4' }
     ];
 
-    // --- CLEAN STATE INITIALIZATION (EMPTY DATA) ---
-    let accounts = JSON.parse(localStorage.getItem('gajipro_clean_accounts')) || [];
-    let transactions = JSON.parse(localStorage.getItem('gajipro_clean_transactions')) || [];
-    let recurringBills = JSON.parse(localStorage.getItem('gajipro_clean_recurring')) || [];
-    
-    let chartCashflowObj = null;
-    let chartCategoryObj = null;
-
-    // --- INIT ---
-    document.addEventListener('DOMContentLoaded', () => {
-      const today = new Date();
-      document.getElementById('global-month-picker').value = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
-      document.getElementById('tx-date').valueAsDate = today;
-
-      // Event Listeners
-      document.getElementById('global-month-picker').addEventListener('change', render);
-      document.getElementById('filter-search').addEventListener('input', render);
-      document.getElementById('filter-type').addEventListener('change', render);
-      document.getElementById('filter-bucket').addEventListener('change', render);
-      document.getElementById('filter-account').addEventListener('change', render);
-
-      render();
+    // --- AUTHENTICATION ENGINE ---
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        currentUser = user;
+        document.getElementById('user-email').textContent = user.email;
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('app-screen').classList.remove('hidden');
+        initRealtimeSync();
+      } else {
+        currentUser = null;
+        document.getElementById('login-screen').classList.remove('hidden');
+        document.getElementById('app-screen').classList.add('hidden');
+      }
     });
+
+    window.loginWithGoogle = () => signInWithPopup(auth, provider);
+    window.logoutGoogle = () => signOut(auth);
+
+    // --- REALTIME FIRESTORE SYNC ---
+    function initRealtimeSync() {
+      if (!currentUser) return;
+
+      // 1. Sync Accounts
+      const qAcc = query(collection(db, "accounts"), where("uid", "==", currentUser.uid));
+      onSnapshot(qAcc, (snapshot) => {
+        accounts = [];
+        snapshot.forEach(doc => accounts.push({ id: doc.id, ...doc.data() }));
+        populateAccountDropdowns();
+        render();
+      });
+
+      // 2. Sync Transactions
+      const qTx = query(collection(db, "transactions"), where("uid", "==", currentUser.uid));
+      onSnapshot(qTx, (snapshot) => {
+        transactions = [];
+        snapshot.forEach(doc => transactions.push({ id: doc.id, ...doc.data() }));
+        render();
+      });
+
+      // 3. Sync Recurring Bills
+      const qRec = query(collection(db, "recurring"), where("uid", "==", currentUser.uid));
+      onSnapshot(qRec, (snapshot) => {
+        recurringBills = [];
+        snapshot.forEach(doc => recurringBills.push({ id: doc.id, ...doc.data() }));
+        render();
+      });
+    }
 
     // --- MAIN RENDER ENGINE ---
     function render() {
@@ -625,8 +690,8 @@
       let totalLiabilities = 0;
 
       accounts.forEach(acc => {
-        if (acc.balance >= 0) totalAssets += acc.balance;
-        else totalLiabilities += Math.abs(acc.balance);
+        if (acc.type === 'liability') totalLiabilities += Math.abs(acc.balance);
+        else totalAssets += acc.balance;
       });
 
       const netWorth = totalAssets - totalLiabilities;
@@ -650,8 +715,7 @@
 
       const netCashflow = monthIncome - monthExpense;
       const savingsRate = monthIncome > 0 ? Math.max(0, Math.round(((monthIncome - monthExpense) / monthIncome) * 100)) : 0;
-      const daysInMonth = 30;
-      const dailyBurnRate = Math.round(monthExpense / daysInMonth);
+      const dailyBurnRate = Math.round(monthExpense / 30);
       const runwayMonths = monthExpense > 0 ? (totalAssets / monthExpense).toFixed(1) : '0';
 
       // Update KPI DOM
@@ -674,15 +738,10 @@
       updateBudgetBar('wants', monthWants, targetWants);
       updateBudgetBar('savings', monthSavings, targetSavings);
 
-      // 3. Render Accounts & Recurring Lists
+      // 3. Render Views
       renderAccountsGrid();
       renderRecurringList();
-      populateAccountDropdowns();
-
-      // 4. Render Table
       renderTable(monthTx);
-
-      // 5. Render Charts
       renderCharts();
 
       lucide.createIcons();
@@ -828,7 +887,7 @@
           <td class="py-3 px-4 text-slate-400">${escapeHtml(accObj.name)}</td>
           <td class="py-3 px-4 text-right font-mono-num ${amtClass}">${prefix}${formatRupiah(tx.amount)}</td>
           <td class="py-3 px-4 text-center">
-            <button onclick="deleteTx('${tx.id}')" class="p-1 text-slate-500 hover:text-rose-400 transition">
+            <button onclick="deleteTx('${tx.id}', '${tx.accountId}', '${tx.type}', ${tx.amount})" class="p-1 text-slate-500 hover:text-rose-400 transition">
               <i data-lucide="trash-2" class="w-4 h-4"></i>
             </button>
           </td>
@@ -911,8 +970,8 @@
       });
     }
 
-    // --- HANDLERS & FORM ACTIONS ---
-    function handleTxSubmit(e) {
+    // --- HANDLERS & FIRESTORE ACTIONS ---
+    window.handleTxSubmit = async (e) => {
       e.preventDefault();
       if (accounts.length === 0) {
         alert('Buat akun dompet / bank terlebih dahulu sebelum menambah transaksi!');
@@ -928,22 +987,31 @@
       const accountId = document.getElementById('tx-account').value;
       const date = document.getElementById('tx-date').value;
 
-      const newTx = { id: 'tx-' + Date.now(), type, amount, category, bucket, desc, accountId, date };
-      transactions.push(newTx);
+      // 1. Add Transaction to Firestore
+      await addDoc(collection(db, "transactions"), {
+        uid: currentUser.uid,
+        type,
+        amount,
+        category,
+        bucket,
+        desc,
+        accountId,
+        date
+      });
 
-      // Adjust account balance
+      // 2. Adjust Account Balance in Firestore
       const acc = accounts.find(a => a.id === accountId);
       if (acc) {
-        if (type === 'income') acc.balance += amount;
-        if (type === 'expense') acc.balance -= amount;
+        let newBal = acc.balance;
+        if (type === 'income') newBal += amount;
+        if (type === 'expense') newBal -= amount;
+        await updateDoc(doc(db, "accounts", accountId), { balance: newBal });
       }
 
-      saveState();
       closeModal('tx');
-      render();
-    }
+    };
 
-    function handleTransferSubmit(e) {
+    window.handleTransferSubmit = async (e) => {
       e.preventDefault();
       const amount = parseFloat(document.getElementById('tr-amount').value) || 0;
       const fromId = document.getElementById('tr-from').value;
@@ -956,11 +1024,13 @@
       const toAcc = accounts.find(a => a.id === toId);
 
       if (fromAcc && toAcc) {
-        fromAcc.balance -= (amount + fee);
-        toAcc.balance += amount;
+        // Update Account Balances
+        await updateDoc(doc(db, "accounts", fromId), { balance: fromAcc.balance - (amount + fee) });
+        await updateDoc(doc(db, "accounts", toId), { balance: toAcc.balance + amount });
 
-        transactions.push({
-          id: 'tx-' + Date.now(),
+        // Record Transfer Transaction
+        await addDoc(collection(db, "transactions"), {
+          uid: currentUser.uid,
           type: 'transfer',
           amount: amount,
           category: 'transfer',
@@ -971,60 +1041,70 @@
         });
       }
 
-      saveState();
       closeModal('transfer');
-      render();
-    }
+    };
 
-    function handleAccountSubmit(e) {
+    window.handleAccountSubmit = async (e) => {
       e.preventDefault();
       const name = document.getElementById('acc-name').value;
       const type = document.getElementById('acc-type').value;
       const balance = parseFloat(document.getElementById('acc-balance').value) || 0;
 
-      accounts.push({ id: 'acc-' + Date.now(), name, type, balance });
-      saveState();
-      closeModal('account');
-      render();
-    }
+      await addDoc(collection(db, "accounts"), {
+        uid: currentUser.uid,
+        name,
+        type,
+        balance
+      });
 
-    function handleRecurringSubmit(e) {
+      closeModal('account');
+    };
+
+    window.handleRecurringSubmit = async (e) => {
       e.preventDefault();
       const name = document.getElementById('rec-name').value;
       const amount = parseFloat(document.getElementById('rec-amount').value) || 0;
       const dueDay = parseInt(document.getElementById('rec-day').value) || 1;
 
-      recurringBills.push({ id: 'rec-' + Date.now(), name, amount, dueDay });
-      saveState();
+      await addDoc(collection(db, "recurring"), {
+        uid: currentUser.uid,
+        name,
+        amount,
+        dueDay
+      });
+
       closeModal('recurring');
-      render();
-    }
+    };
 
-    function deleteTx(id) {
-      if (confirm('Hapus transaksi ini?')) {
-        transactions = transactions.filter(t => t.id !== id);
-        saveState();
-        render();
+    window.deleteTx = async (id, accountId, type, amount) => {
+      if (confirm('Hapus transaksi ini dari Cloud?')) {
+        await deleteDoc(doc(db, "transactions", id));
+        
+        // Reverse Account Balance
+        const acc = accounts.find(a => a.id === accountId);
+        if (acc && type !== 'transfer') {
+          let newBal = acc.balance;
+          if (type === 'income') newBal -= amount;
+          if (type === 'expense') newBal += amount;
+          await updateDoc(doc(db, "accounts", accountId), { balance: newBal });
+        }
       }
-    }
+    };
 
-    function deleteAccount(id) {
-      if (confirm('Hapus akun ini?')) {
-        accounts = accounts.filter(a => a.id !== id);
-        saveState();
-        render();
+    window.deleteAccount = async (id) => {
+      if (confirm('Hapus akun dompet ini dari Cloud?')) {
+        await deleteDoc(doc(db, "accounts", id));
       }
-    }
+    };
 
-    function deleteRecurring(id) {
-      if (confirm('Hapus tagihan ini?')) {
-        recurringBills = recurringBills.filter(r => r.id !== id);
-        saveState();
-        render();
+    window.deleteRecurring = async (id) => {
+      if (confirm('Hapus tagihan rutin ini dari Cloud?')) {
+        await deleteDoc(doc(db, "recurring", id));
       }
-    }
+    };
 
-    function setTxType(type) {
+    // --- UTILITIES ---
+    window.setTxType = (type) => {
       document.getElementById('tx-type').value = type;
       const btnExp = document.getElementById('btn-tx-expense');
       const btnInc = document.getElementById('btn-tx-income');
@@ -1038,7 +1118,7 @@
       }
 
       populateCategoryDropdown(type);
-    }
+    };
 
     function populateCategoryDropdown(type) {
       const select = document.getElementById('tx-category');
@@ -1051,11 +1131,11 @@
       autoAssignBucket();
     }
 
-    function autoAssignBucket() {
+    window.autoAssignBucket = () => {
       const catId = document.getElementById('tx-category').value;
       const cat = CATEGORIES.find(c => c.id === catId);
       if (cat) document.getElementById('tx-bucket').value = cat.bucket;
-    }
+    };
 
     function populateAccountDropdowns() {
       const txAcc = document.getElementById('tx-account');
@@ -1076,76 +1156,45 @@
       });
     }
 
-    function saveState() {
-      localStorage.setItem('gajipro_clean_accounts', JSON.stringify(accounts));
-      localStorage.setItem('gajipro_clean_transactions', JSON.stringify(transactions));
-      localStorage.setItem('gajipro_clean_recurring', JSON.stringify(recurringBills));
-    }
-
-    function openModal(name) {
+    window.openModal = (name) => {
       if (name === 'tx') {
         document.getElementById('form-tx').reset();
         setTxType('expense');
         document.getElementById('tx-date').valueAsDate = new Date();
       }
       document.getElementById(`modal-${name}`).classList.remove('opacity-0', 'pointer-events-none');
-    }
+    };
 
-    function closeModal(name) {
+    window.closeModal = (name) => {
       document.getElementById(`modal-${name}`).classList.add('opacity-0', 'pointer-events-none');
-    }
+    };
 
     function formatRupiah(num) {
       return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num);
     }
 
-    function formatAmountInput(input) {
+    window.formatAmountInput = (input) => {
       let val = input.value.replace(/\D/g, "");
       const hiddenId = input.id.replace('-disp', '');
       document.getElementById(hiddenId).value = val;
       input.value = val ? val.replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "";
-    }
+    };
 
     function escapeHtml(str) {
       return str.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m]));
     }
 
-    function exportJSON() {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ accounts, transactions, recurringBills }, null, 2));
-      const a = document.createElement('a');
-      a.href = dataStr; a.download = `gajikemana_clean_backup_${new Date().toISOString().slice(0,10)}.json`;
-      a.click();
-    }
-
-    function importJSON(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        try {
-          const imported = JSON.parse(evt.target.result);
-          if (imported.accounts && imported.transactions) {
-            accounts = imported.accounts;
-            transactions = imported.transactions;
-            if (imported.recurringBills) recurringBills = imported.recurringBills;
-            saveState(); render();
-            alert('Data berhasil di-import!');
-          }
-        } catch (err) { alert('Format file JSON tidak valid!'); }
-      };
-      reader.readAsText(file);
-    }
-
-    function resetAllData() {
-      if (confirm('Hapus seluruh data yang sudah Anda masukkan?')) {
-        localStorage.clear();
-        accounts = [];
-        transactions = [];
-        recurringBills = [];
-        saveState();
-        render();
-      }
-    }
+    // Event Listeners for Filters
+    document.addEventListener('DOMContentLoaded', () => {
+      const today = new Date();
+      document.getElementById('global-month-picker').value = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
+      
+      document.getElementById('global-month-picker').addEventListener('change', render);
+      document.getElementById('filter-search').addEventListener('input', render);
+      document.getElementById('filter-type').addEventListener('change', render);
+      document.getElementById('filter-bucket').addEventListener('change', render);
+      document.getElementById('filter-account').addEventListener('change', render);
+    });
   </script>
 </body>
 </html>
